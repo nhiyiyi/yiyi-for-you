@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-
 <!-- Vercel Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
 
@@ -26,18 +25,9 @@
   var params = new URLSearchParams(window.location.search);
   var ref = params.get('ref') || params.get('utm_source') || params.get('utm_campaign') || '';
   var referrer = document.referrer || 'direct';
-  var landedAt = new Date().toISOString();
-  window._yiyiTracking = { ref: ref, referrer: referrer, landedAt: landedAt };
-
-  // Fire GA custom event for identified visits
-  if(ref) {
-    setTimeout(function(){
-      if(window.gtag) gtag('event', 'identified_visit', { ref: ref, referrer: referrer });
-    }, 1000);
-  }
-
-  // Track time on page
+  window._yiyiTracking = { ref: ref, referrer: referrer, landedAt: new Date().toISOString() };
   window._yiyiStart = Date.now();
+  if(ref && window.gtag) gtag('event', 'identified_visit', { ref: ref, referrer: referrer });
 })();
 </script>
 
@@ -60,7 +50,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 .blur-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);-webkit-mask-image:linear-gradient(to top,black 0%,transparent 45%);mask-image:linear-gradient(to top,black 0%,transparent 45%)}
 .dark-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(9,9,11,0.3) 0%,rgba(9,9,11,0.6) 50%,rgba(9,9,11,0.95) 100%)}
 
-.liquid-glass{background:rgba(255,255,255,0.01);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:none;box-shadow:inset 0 1px 1px rgba(255,255,255,0.1);position:relative;overflow:hidden}
+.liquid-glass{background:rgba(255,255,255,0.01);background-blend-mode:luminosity;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:none;box-shadow:inset 0 1px 1px rgba(255,255,255,0.1);position:relative;overflow:hidden}
 .liquid-glass::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.4px;background:linear-gradient(180deg,rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.15) 20%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.15) 80%,rgba(255,255,255,0.45) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none}
 
 @keyframes blurFadeUp{from{opacity:0;filter:blur(20px);transform:translateY(40px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
@@ -102,6 +92,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 .dark-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 
+/* About Me cards */
 .about-grid{display:grid;grid-template-columns:auto 1fr;gap:48px;margin-top:48px;align-items:start}
 .about-card{border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:16px}
 .about-avatar{width:56px;height:56px;border-radius:14px;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
@@ -113,197 +104,213 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .about-text b{color:var(--text);font-weight:500}
 @media(max-width:720px){.about-grid{grid-template-columns:1fr}.about-meta{grid-template-columns:repeat(3,1fr)}.about-card{padding:24px}}
 
+/* Why fit cards */
 .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
-.fit-card{border:1px solid var(--border);border-radius:16px;padding:32px}
+.fit-card{border:1px solid var(--border);border-radius:16px;padding:32px;transition:border-color .3s}
+.fit-card:hover{border-color:var(--border2)}
+.fit-icon{font-size:28px;margin-bottom:16px}
 .fit-title{font-size:16px;font-weight:600;margin-bottom:10px;letter-spacing:-.01em}
-.fit-desc{font-size:14px;color:var(--muted2);line-height:1.7;font-weight:300}
+.fit-desc{font-size:14px;color:var(--muted2);line-height:1.75;font-weight:300}
 @media(max-width:640px){.fit-grid{grid-template-columns:1fr}.fit-card{padding:24px}}
 
-.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
-.tool-chip{border:1px solid var(--border);border-radius:12px;padding:16px 18px}
-.tool-name{font-size:14px;font-weight:500}
-.tool-cat{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+/* Tools */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:40px}
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color .25s}
+.tool-card:hover{border-color:var(--border2)}
 @media(max-width:640px){.tools-grid{grid-template-columns:repeat(2,1fr)}.tools-two-col{grid-template-columns:1fr !important}}
 
-.cta-section{position:relative;padding:80px 48px;overflow:hidden;background:var(--surface);border-top:1px solid var(--border)}
-.cta-card-inner{position:relative;border-radius:24px;padding:64px 56px;text-align:center;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);z-index:1;overflow:hidden}
+/* CTA */
+.cta-section{padding:80px 48px 120px;text-align:center}
 .cta-title{font-size:clamp(32px,5vw,56px);font-weight:600;letter-spacing:-.035em;margin-bottom:16px}
-.cta-sub{font-size:16px;color:var(--muted2);line-height:1.7;max-width:480px;margin:0 auto;font-weight:300}
-.cta-actions{display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap}
-.crow{display:flex;align-items:baseline;gap:8px;justify-content:center;margin-bottom:8px}
-.crow-val{font-size:clamp(22px,3vw,32px);font-weight:600;letter-spacing:-.03em}
+.cta-sub{font-size:16px;color:var(--muted2);max-width:440px;margin:0 auto 48px;line-height:1.8;font-weight:300}
+.contact-rows{display:flex;flex-direction:column;gap:12px;align-items:center}
+.crow{display:flex;align-items:center;gap:14px;font-size:15px}
 .crow-lbl{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;min-width:46px;text-align:right}
-@keyframes borderRotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-@keyframes lineExpand{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+.crow-val{color:var(--muted2);font-weight:300}
+.crow-val a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--border2);transition:border-color .2s}
+.crow-val a:hover{border-color:var(--text)}
+.cta-actions{display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap}
 @media(max-width:640px){.cta-section{padding:60px 20px 80px}.cta-card-inner{padding:48px 24px !important}.crow{flex-direction:column;gap:4px}.crow-lbl{text-align:center;min-width:unset}.cta-actions{flex-direction:column;width:100%}.cta-actions .btn-primary,.cta-actions .btn-glass{width:100%;justify-content:center}}
 
-footer{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
-footer a{color:var(--muted);text-decoration:none}
-footer a:hover{color:var(--text)}
+footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);font-weight:300}
 @media(max-width:640px){footer{padding:20px 16px;flex-direction:column;align-items:center;text-align:center;gap:12px}}
 </style>
 </head>
 <body>
 
-<!-- Video Background -->
-<div class="video-bg">
-  <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=60">
-    <source src="https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-1573/1080p.mp4" type="video/mp4"/>
-  </video>
-</div>
+<div class="video-bg"><video autoplay muted loop playsinline><source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_094145_4a271a6c-3869-4f1c-8aa7-aeb0cb227994.mp4" type="video/mp4"/></video></div>
 <div class="blur-overlay"></div>
 <div class="dark-overlay"></div>
 
-<!-- Nav -->
 <nav>
-  <div class="nav-left">
-    <div class="nav-logo">YY</div>
-    <div class="nav-name"><b>Long Nhi (Yiyi)</b></div>
-    <div class="nav-contact">
-      <span class="sep"></span>
-      <a href="mailto:nhivu.hcm.work@gmail.com">nhivu.hcm.work@gmail.com</a>
-      <span class="sep"></span>
-      <a href="tel:+84903913625">+84 903 913 625</a>
-    </div>
+  <div class="nav-left bfu" style="animation-delay:0ms">
+    <div class="nav-logo">YI</div>
+    <div class="nav-name">Long Nhi <b>(Yiyi)</b></div>
+  </div>
+  <div class="nav-contact bfu" style="animation-delay:100ms">
+    <a href="mailto:nhivu.hcm.work@gmail.com">nhivu.hcm.work@gmail.com</a>
+    <div class="sep"></div>
+    <span>+84 903 913 625</span>
   </div>
   <div class="bfu" style="animation-delay:150ms;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);letter-spacing:.01em">Dedicated For You</div>
 </nav>
 
-<!-- Hero -->
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow bfu" style="animation-delay:100ms">Executive Assistant · Ho Chi Minh City, GMT+7</div>
   <h1 class="bfu" style="animation-delay:300ms">Hi, I'm Yiyi</h1>
-  <p class="hero-sub bfu" style="animation-delay:500ms">
-    Usually, I wouldn't send a resume. As I believe a person could not be judged through a piece of paper.<br><br>
-    Instead, I built this<br><br>
-    Because the best way to show you what I do and save your team time — is to <b style="color:#fff">do it right now, for myself.</b>
+  <p class="hero-sub bfu" style="animation-delay:450ms">
+    Usually, I wouldn't send a resume. As I believe a person could not be judged through a piece of paper.
   </p>
+  <div class="bfu" style="animation-delay:550ms;font-size:clamp(22px,3.5vw,36px);font-weight:600;letter-spacing:-.03em;margin-top:20px;line-height:1.2">
+    Instead, I built <span style="border-bottom:2px solid rgba(255,255,255,0.4);padding-bottom:2px">this</span>.
+  </div>
+  <p class="hero-sub bfu" style="animation-delay:650ms;margin-top:16px">
+    Because the best way to show you what I do and save your team time — is to <b style="color:#fff;font-weight:600">do it right now</b>, for myself.
+  </p>
+  <div class="hero-role bfu" style="animation-delay:600ms">
+</div>
   <div class="hero-actions bfu" style="animation-delay:700ms">
-    <a href="https://rebrand.ly/yiyi-linkedin" target="_blank" rel="noopener" class="btn-primary">Get in Touch</a>
-    <a href="#proof" class="btn-glass liquid-glass" style="border-radius:var(--radius)">See My Work</a>
+    <a href="#built" class="btn-primary">See What I've Built</a>
+    <a href="https://rebrand.ly/yiyi-linkedin" target="_blank" rel="noopener" class="btn-glass liquid-glass" style="border-radius:var(--radius)">Get in Touch</a>
   </div>
 </div>
 
-<!-- Content -->
 <div class="content-body">
 
-  <!-- Systems -->
-  <section class="section" id="proof">
-    <div class="container">
-      <div class="section-eyebrow reveal">What I build</div>
-      <h2 class="section-title reveal reveal-d1">Here are a few.</h2>
-      <p class="section-sub reveal reveal-d2">I've built and shipped more than what's shown here. These are three I can share publicly — all running live for real teams.</p>
-      <div id="proof-mount" style="margin-top:48px"></div>
-    </div>
-  </section>
+<!-- WHAT I'VE BUILT -->
+<section class="section dark-section" id="built">
+  <div class="container">
+    <div class="section-eyebrow reveal">What I've Built</div>
+    <h2 class="section-title reveal reveal-d1">Here are a few.</h2>
+    <p class="section-sub reveal reveal-d2">I've built and shipped more than what's shown here. These are three I can share publicly — all running live for real teams.</p>
+    <div id="proof-mount" class="reveal reveal-d3"></div>
+  </div>
+</section>
 
-  <!-- Tools -->
-  <section class="section dark-section">
-    <div class="container">
-      <div class="section-eyebrow reveal">Stack</div>
-      <h2 class="section-title reveal reveal-d1">Tools I use daily</h2>
-      <div class="reveal reveal-d2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px" class="tools-two-col">
-        <div>
+<!-- TOOLS -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Stack</div>
+    <h2 class="section-title reveal reveal-d1">Tools I use daily</h2>
+    <p class="section-sub reveal reveal-d2">I'm not loyal to tools — I'm loyal to solving problems. If a new tool does it better, I'll learn it today and ship with it tomorrow.</p>
+    <div class="reveal reveal-d2" style="margin-top:40px">
+      <div class="tools-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <!-- AI Column -->
+        <div style="border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;background:#141418">
           <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px">AI &amp; Reasoning</div>
-          <div class="tools-grid">
-            <div class="tool-chip"><div class="tool-name">Claude</div><div class="tool-cat">Reasoning</div></div>
-            <div class="tool-chip"><div class="tool-name">ChatGPT</div><div class="tool-cat">Drafting</div></div>
-            <div class="tool-chip"><div class="tool-name">Perplexity</div><div class="tool-cat">Research</div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Claude</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Claude Code</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">ChatGPT</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Cursor / AI IDE</span></div>
           </div>
         </div>
-        <div>
+        <!-- Automation Column -->
+        <div style="border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;background:#141418">
           <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px">Automation &amp; Data</div>
-          <div class="tools-grid">
-            <div class="tool-chip"><div class="tool-name">n8n</div><div class="tool-cat">Automation</div></div>
-            <div class="tool-chip"><div class="tool-name">Python</div><div class="tool-cat">Scripting</div></div>
-            <div class="tool-chip"><div class="tool-name">Sheets</div><div class="tool-cat">Data</div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Google Apps Script</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">n8n / Make</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Gmail Automation</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">SQL &amp; Sheets</span></div>
+            <div style="display:flex;align-items:center"><span style="font-size:15px;font-weight:500">Sentry</span></div>
           </div>
         </div>
       </div>
-      <div class="reveal reveal-d3" style="margin-top:20px;font-size:14px;color:var(--muted2);font-weight:300">…and many more. To me, the stack is never the point — the outcome is.</div>
+      <div style="margin-top:16px;padding:20px 24px;border:1px solid rgba(255,255,255,0.08);border-radius:12px;background:#141418;font-size:14px;color:rgba(255,255,255,0.6);font-weight:300;font-style:italic">
+        …and many more. To me, the stack is never the point — the outcome is.
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- About -->
-  <section class="section dark-section">
-    <div class="container">
-      <div class="section-eyebrow reveal">Background</div>
-      <div class="about-grid reveal reveal-d1">
-        <div class="about-card">
-          <div class="about-avatar">Y</div>
-          <div style="font-size:16px;font-weight:600">Long Nhi (Yiyi)</div>
+<!-- ABOUT ME -->
+<section class="section dark-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">About Me</div>
+    <div class="about-grid reveal reveal-d1">
+      <div class="about-card">
+        <div class="about-avatar">Y</div>
+        <div>
+          <div style="font-size:20px;font-weight:600;letter-spacing:-.02em">Yiyi</div>
           <div style="font-size:13px;color:var(--muted2);margin-top:2px">Marketing Background · Operations &amp; AI</div>
-          <div class="about-meta">
-            <div class="about-meta-item"><div class="about-meta-n">5+</div><div class="about-meta-l">Years</div></div>
-            <div class="about-meta-item"><div class="about-meta-n">GMT+7</div><div class="about-meta-l">Timezone</div></div>
-            <div class="about-meta-item"><div class="about-meta-n">Remote</div><div class="about-meta-l">Ready</div></div>
-          </div>
         </div>
-        <div class="about-text">
-          I come from a <b>marketing background</b> — which means I think about everything through the lens of the customer. Who are they? What do they need? Where's the friction?<br><br>
-          That mindset carries into everything I do now. Whether I'm designing a workflow, automating outreach, or building a tracking system — <b>the customer is always at the center.</b><br><br>
-          Over the last few years I've layered hands-on skills in AI and workflow automation on top of that foundation. I don't just use tools — I identify the inefficiency first, then pick the right tool to fix it. Whether that's n8n, a Python script, or Claude reasoning over messy data.<br><br>
-          I'm comfortable working independently in a remote environment, managing competing priorities, and communicating clearly with stakeholders.
+        <div class="about-meta">
+          <div class="about-meta-item"><div class="about-meta-n">4+</div><div class="about-meta-l">Live workflows</div></div>
+          <div class="about-meta-item"><div class="about-meta-n">AI</div><div class="about-meta-l">First approach</div></div>
+          <div class="about-meta-item"><div class="about-meta-n">GMT+7</div><div class="about-meta-l">Time zone</div></div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Fit -->
-  <section class="section">
-    <div class="container">
-      <div class="section-eyebrow reveal">The Match</div>
-      <h2 class="section-title reveal reveal-d1">Why I am (potentially)<br>the right fit.</h2>
-      <p class="section-sub reveal reveal-d2">You're not looking for a traditional employee — you need someone who lives and breathes AI as a daily working tool. That's exactly how I operate.</p>
-      <div class="fit-grid reveal reveal-d3">
-        <div class="fit-card">
-          <div class="fit-title">AI-native, not AI-curious</div>
-          <div class="fit-desc">I don't experiment with AI on weekends. I use it to run actual systems daily — from automated candidate tracking to live data pipelines. It's my primary tool, not a side skill.</div>
-        </div>
-        <div class="fit-card">
-          <div class="fit-title">I've done the operational work</div>
-          <div class="fit-desc">Scheduling, inbox management, partner onboarding, report generation — I've done all of it, and then automated most of it. I know what the job looks like before and after AI.</div>
-        </div>
-        <div class="fit-card">
-          <div class="fit-title">Based in Vietnam · GMT+7</div>
-          <div class="fit-desc">I'm based in Ho Chi Minh City, working in the GMT+7 timezone — which should align well with your team's working hours. Minimal lag, easy coordination.</div>
-        </div>
-        <div class="fit-card">
-          <div class="fit-title">I find the problem first</div>
-          <div class="fit-desc">Before I build anything, I make sure I understand what's actually slow or broken. The solution comes second. This keeps me from over-engineering things that don't need it.</div>
-        </div>
+      <div class="about-text">
+        I come from a <b>marketing background</b> — which means I think about everything through the lens of the customer. Who are they? What do they need? Where's the friction?<br><br>
+        That mindset carries into everything I do now. Whether I'm designing a workflow, automating outreach, or building a tracking system — <b>the customer is always at the center.</b><br><br>
+        Over the last few years I've layered hands-on skills in AI and workflow automation on top of that foundation. I don't just use tools — I identify the inefficiency first, then pick the right tool to fix it. Whether that's n8n, a Python script, or Claude reasoning over messy data.<br><br>
+        I'm comfortable working independently in a remote environment, managing competing priorities, and communicating clearly with stakeholders — which is what you need in this role.
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA -->
-  <div class="cta-section">
-    <div style="position:absolute;inset:0;overflow:hidden;z-index:0">
-      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.06);animation:none"></div>
+<!-- WHY THIS ROLE -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Why This Role</div>
+    <h2 class="section-title reveal reveal-d1">Why I am (potentially)<br>the right fit.</h2>
+    <p class="section-sub reveal reveal-d2">You're not looking for a traditional employee — you need someone who lives and breathes AI as a daily working tool. That's exactly how I operate.</p>
+    <div class="fit-grid reveal reveal-d3">
+      <div class="fit-card">
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:16px;letter-spacing:.06em">01</div>
+        <div class="fit-title">AI-native, not AI-curious</div>
+        <div class="fit-desc">I use Claude daily for real work — not just drafting emails, but for reasoning over data, catching errors, and identifying optimizations.</div>
+      </div>
+      <div class="fit-card">
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:16px;letter-spacing:.06em">02</div>
+        <div class="fit-title">I've done plenty of operation tasks</div>
+        <div class="fit-desc">Designing automated workflows, reducing manual work, supporting cross-functional operations — these aren't aspirations, they're things I've shipped.</div>
+      </div>
+      <div class="fit-card">
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:16px;letter-spacing:.06em">03</div>
+    <div class="fit-title">Based in Vietnam · GMT+7</div>
+        <div class="fit-desc">I'm based in Ho Chi Minh City, working in the GMT+7 timezone — which should align well with your team's working hours. Minimal lag, easy coordination.</div>
+      </div>
+      <div class="fit-card">
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:16px;letter-spacing:.06em">04</div>
+        <div class="fit-title">I find the problem first</div>
+        <div class="fit-desc">I don't wait to be told what to automate. I look at how work is flowing and ask where the friction is — then remove it.</div>
+      </div>
     </div>
-    <div class="container" style="position:relative;z-index:1">
-      <!-- Rotating border CTA card -->
-      <div style="position:relative;border-radius:24px;overflow:hidden">
-        <div style="position:absolute;inset:-2px;border-radius:26px;background:conic-gradient(from var(--angle,0deg),transparent 0%,rgba(255,255,255,0.5) 10%,transparent 20%);animation:borderRotate 4s linear infinite;z-index:0"></div>
-        <div class="cta-card-inner" style="margin:2px">
-          <div style="display:flex;align-items:center;justify-content:center;gap:40px;margin-bottom:40px;flex-wrap:wrap">
-            <div style="text-align:center">
-              <div class="crow"><span class="crow-val">5+</span></div>
-              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Years remote</div>
-            </div>
-            <div style="width:1px;height:40px;background:var(--border)"></div>
-            <div style="text-align:center">
-              <div class="crow"><span class="crow-val">3</span></div>
-              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Live systems</div>
-            </div>
-            <div style="width:1px;height:40px;background:var(--border)"></div>
-            <div style="text-align:center">
-              <div class="crow"><span class="crow-val">GMT+7</span></div>
-              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Timezone</div>
-            </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta-section">
+  <div class="container">
+    <div style="position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:80px 48px;text-align:center;background:#141418">
+      <!-- Animated gradient border -->
+      <style>
+        @keyframes borderRotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        @keyframes textReveal{0%{opacity:0;letter-spacing:0.2em;filter:blur(8px)}100%{opacity:1;letter-spacing:-0.035em;filter:blur(0)}}
+        @keyframes lineExpand{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+        .cta-card-wrap{position:relative;overflow:hidden;border-radius:24px}
+        .cta-card-wrap::before{
+          content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+          background:conic-gradient(from 0deg,transparent 0%,rgba(255,255,255,0.35) 8%,rgba(255,255,255,0.5) 10%,rgba(255,255,255,0.35) 12%,transparent 20%,transparent 50%,rgba(255,255,255,0.35) 58%,rgba(255,255,255,0.5) 60%,rgba(255,255,255,0.35) 62%,transparent 70%);
+          animation:borderRotate 4s linear infinite;z-index:0;
+        }
+        .cta-card-inner{position:relative;z-index:1;background:#141418;border-radius:23px;margin:1px;padding:80px 48px}
+        .cta-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);margin:0 auto;max-width:200px}
+      </style>
+      <div class="cta-card-wrap" style="border:none;padding:0;background:transparent;border-radius:24px">
+        <div class="cta-card-inner">
+          <div class="cta-line" style="margin-bottom:40px;animation:lineExpand 1.5s ease-out both"></div>
+          <h2 class="cta-title" style="margin-bottom:20px">Let's talk.</h2>
+          <p class="cta-sub" style="margin:0 auto 44px">Happy to discuss more about the role or walk you through any of these systems in a 20-minute call.</p>
+          <div class="contact-rows" style="margin-bottom:44px">
+            <div class="crow"><span class="crow-lbl">Email</span><span class="crow-val"><a href="mailto:nhivu.hcm.work@gmail.com">nhivu.hcm.work@gmail.com</a></span></div>
+            <div class="crow"><span class="crow-lbl">Phone</span><span class="crow-val">+84 903 913 625</span></div>
+            <div class="crow"><span class="crow-lbl">Based</span><span class="crow-val">Ho Chi Minh City · GMT+7</span></div>
           </div>
-          <h2 class="cta-title">Let's talk.</h2>
-          <p class="cta-sub">If this feels like the kind of person you need — reach out. No CV, no cover letter. Just a conversation.</p>
+          <div class="cta-line" style="margin-bottom:40px;animation:lineExpand 1.5s 0.3s ease-out both"></div>
           <div class="cta-actions">
             <a href="https://rebrand.ly/yiyi-linkedin" target="_blank" rel="noopener" class="btn-primary" style="font-size:16px;padding:14px 40px">Connect on LinkedIn</a>
             <a href="mailto:nhivu.hcm.work@gmail.com" class="btn-glass liquid-glass" style="border-radius:var(--radius);font-size:16px;padding:14px 40px">Email Me</a>
@@ -312,167 +319,267 @@ footer a:hover{color:var(--text)}
       </div>
     </div>
   </div>
+</section>
 
-</div><!-- end content-body -->
-
-<!-- Footer -->
 <footer>
   <span>Long Nhi (Yiyi) · <a href="#" id="feedback-trigger" style="color:rgba(255,255,255,0.6);text-decoration:underline;text-underline-offset:2px;cursor:pointer;transition:color .2s">How was my presentation?</a></span>
-  <span style="color:rgba(255,255,255,0.25)">Ho Chi Minh City, Vietnam</span>
+  <span>Built for you - so you can send to the team faster</span>
 </footer>
 
 <!-- Feedback Modal -->
 <div id="feedback-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);align-items:center;justify-content:center">
-  <div style="background:#141418;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px;max-width:440px;width:calc(100% - 40px);position:relative">
+  <div style="background:#141418;border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:44px;max-width:440px;width:90%;position:relative">
     <button id="feedback-close" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">✕</button>
     <div id="feedback-content">
-      <div style="font-size:18px;font-weight:600;margin-bottom:8px">Your honest take</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px">Anonymous. One sentence is enough.</div>
-      <textarea id="feedback-text" placeholder="One sentence to help me grow as a better professional..." style="width:100%;height:80px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:14px;resize:none;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+      <div style="font-size:20px;font-weight:600;margin-bottom:6px">Rate this presentation</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px">Your honest feedback helps me grow. Thank you!</div>
+      <div style="display:flex;gap:8px;margin-bottom:24px" id="star-row"></div>
+      <textarea id="feedback-text" name="feedback" placeholder="One sentence to help me grow as a better professional..." style="width:100%;height:80px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:14px;resize:none;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
       <button type="button" id="feedback-submit" style="margin-top:16px;width:100%;padding:13px;border-radius:80px;border:none;background:#fff;color:#09090b;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s;opacity:0.4;pointer-events:none" disabled>Send Feedback</button>
-    </div>
-    <div id="feedback-thanks" style="display:none;text-align:center;padding:20px 0">
-      <div style="font-size:32px;margin-bottom:16px">🙏</div>
-      <div style="font-size:16px;font-weight:600;margin-bottom:8px">Thank you.</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.5)">That genuinely helps.</div>
     </div>
   </div>
 </div>
 
 <script>
-// Feedback modal logic
-var modal=document.getElementById('feedback-modal'),
-    trigger=document.getElementById('feedback-trigger'),
-    close=document.getElementById('feedback-close'),
-    txt=document.getElementById('feedback-text'),
-    btn=document.getElementById('feedback-submit');
-
-trigger.addEventListener('click',function(e){e.preventDefault();modal.style.display='flex';});
-close.addEventListener('click',function(){modal.style.display='none';});
-modal.addEventListener('click',function(e){if(e.target===modal)modal.style.display='none';});
-txt.addEventListener('input',function(){
-  var ok=this.value.trim().length>5;
-  btn.disabled=!ok;btn.style.opacity=ok?'1':'0.4';btn.style.pointerEvents=ok?'auto':'none';
-});
-
-btn.addEventListener('click',function(){
-  var t=window._yiyiTracking||{};
-  var timeOnPage=Math.round((Date.now()-window._yiyiStart)/1000)+'s';
-  var subject='Yiyi Portfolio Feedback'+(t.ref?' — via '+t.ref:'');
-
-  // GA event
-  if(window.gtag) gtag('event','feedback_submitted',{ref:t.ref||'direct',time_on_page:timeOnPage});
-
-  // FormSubmit
-  var form=document.createElement('form');
-  form.method='POST';
-  form.action='https://formsubmit.co/nhivu.hcm.work@gmail.com';
-  form.style.display='none';
-
-  var fields={
-    '_subject': subject,
-    '_captcha': 'false',
-    '_template': 'table',
-    'feedback': txt.value,
-    'ref': t.ref||'direct',
-    'referrer': t.referrer||'direct',
-    'time_on_page': timeOnPage,
-    'device': navigator.userAgent.match(/Mobile/)? 'Mobile':'Desktop',
-    'landed_at': t.landedAt||'',
-    'page_url': window.location.href
-  };
-
-  for(var k in fields){
-    var i=document.createElement('input');
-    i.type='hidden';i.name=k;i.value=fields[k];
-    form.appendChild(i);
-  }
-
-  document.body.appendChild(form);
-  form.submit();
-
-  document.getElementById('feedback-content').style.display='none';
-  document.getElementById('feedback-thanks').style.display='block';
-  setTimeout(function(){modal.style.display='none';
-    document.getElementById('feedback-content').style.display='block';
-    document.getElementById('feedback-thanks').style.display='none';
-    txt.value='';btn.disabled=true;btn.style.opacity='0.4';btn.style.pointerEvents='none';
-  },2500);
-});
-
-// Scroll reveal
-var revEls=document.querySelectorAll('.reveal');
-var ro=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
-},{threshold:.1});
-revEls.forEach(function(el){ro.observe(el);});
-
-// CTA border animation via CSS variable
 (function(){
-  var angle=0;
-  var card=document.querySelector('.cta-section [style*="conic-gradient"]');
-  if(!card)return;
-  function tick(){angle=(angle+0.5)%360;card.style.setProperty('--angle',angle+'deg');requestAnimationFrame(tick);}
-  tick();
+  var modal=document.getElementById('feedback-modal'),
+      trigger=document.getElementById('feedback-trigger'),
+      closeBtn=document.getElementById('feedback-close'),
+      starRow=document.getElementById('star-row'),
+      submitBtn=document.getElementById('feedback-submit'),
+      contentDiv=document.getElementById('feedback-content'),
+      textArea=document.getElementById('feedback-text'),
+      rating=0;
+
+  // Build stars
+  for(var i=1;i<=5;i++){
+    var btn=document.createElement('button');
+    btn.type='button';btn.dataset.val=i;btn.textContent='★';
+    btn.style.cssText='background:none;border:1px solid rgba(255,255,255,0.12);border-radius:10px;width:48px;height:48px;font-size:22px;cursor:pointer;transition:all .2s;color:rgba(255,255,255,0.3)';
+    starRow.appendChild(btn);
+  }
+  var stars=starRow.querySelectorAll('button');
+
+  trigger.addEventListener('click',function(e){e.preventDefault();modal.style.display='flex'});
+  closeBtn.addEventListener('click',function(){modal.style.display='none'});
+  modal.addEventListener('click',function(e){if(e.target===modal)modal.style.display='none'});
+
+  stars.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      rating=parseInt(btn.dataset.val);
+      submitBtn.disabled=false;submitBtn.style.opacity='1';submitBtn.style.pointerEvents='auto';
+      stars.forEach(function(s){
+        var v=parseInt(s.dataset.val);
+        if(v<=rating){s.style.color='#fff';s.style.borderColor='rgba(255,255,255,0.3)';s.style.background='rgba(255,255,255,0.08)'}
+        else{s.style.color='rgba(255,255,255,0.3)';s.style.borderColor='rgba(255,255,255,0.12)';s.style.background='none'}
+      });
+    });
+  });
+
+  submitBtn.addEventListener('click',function(){
+    var feedback=textArea.value||'(no comment)';
+    var body='Rating: '+rating+'/5\nFeedback: '+feedback+'\nFrom: Axcel Partners presentation page';
+
+    // Try FormSubmit first
+    var formData=new FormData();
+    var t=window._yiyiTracking||{};
+    var timeOnPage=Math.round((Date.now()-window._yiyiStart)/1000)+'s';
+    var subject='Yiyi Portfolio Feedback'+(t.ref?' — via '+t.ref:'');
+    formData.append('_subject', subject);
+    formData.append('ref', t.ref||'direct');
+    formData.append('referrer', t.referrer||'direct');
+    formData.append('time_on_page', timeOnPage);
+    formData.append('device', navigator.userAgent.match(/Mobile/)?'Mobile':'Desktop');
+    if(window.gtag) gtag('event','feedback_submitted',{ref:t.ref||'direct',time_on_page:timeOnPage});
+    formData.append('_captcha','false');
+    formData.append('_template','table');
+    formData.append('rating',rating+'/5');
+    formData.append('feedback',feedback);
+    formData.append('source','Axcel Partners presentation');
+
+    fetch('https://formsubmit.co/ajax/nhivu.hcm.work@gmail.com',{
+      method:'POST',body:formData,headers:{'Accept':'application/json'}
+    }).then(function(r){return r.json()}).then(function(data){
+      if(data.success){showThanks()}else{fallbackMailto(body)}
+    }).catch(function(){fallbackMailto(body)});
+
+    submitBtn.textContent='Sending...';submitBtn.disabled=true;submitBtn.style.opacity='0.5';
+  });
+
+  function showThanks(){
+    contentDiv.innerHTML='<div style="text-align:center;padding:30px 0"><div style="font-size:40px;margin-bottom:16px">✓</div><div style="font-size:20px;font-weight:600;margin-bottom:8px">Thank you!</div><div style="font-size:14px;color:rgba(255,255,255,0.5)">Your feedback has been sent to Yiyi.</div></div>';
+  }
+  function fallbackMailto(body){
+    var subj=encodeURIComponent('Presentation Feedback — Yiyi EA Application');
+    var b=encodeURIComponent(body);
+    window.location.href='mailto:nhivu.hcm.work@gmail.com?subject='+subj+'&body='+b;
+    showThanks();
+  }
 })();
 </script>
 
-<!-- React: Proof Section -->
+</div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel">
-const {useState,useEffect} = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "proofLayout": "B"
+}/*EDITMODE-END*/;
 
 const CASES = [
-  { id:'support', headline:'8→1 hr', metric:'8→1hr', metricLabel:'daily', sub:'daily email handling', title:'Support Operations Scaling Suite',
-    desc:'Built a triage + routing system in n8n that reads every inbound support ticket, classifies it by urgency and topic, drafts a response using Claude, and routes to the right person. What used to take a team 8 hours now runs in under 1.',
-    tags:['n8n','Claude API','Gmail','Notion'] },
-  { id:'outreach', headline:'1,000+', metric:'1,000+', metricLabel:'per day', sub:'emails sent daily', title:'High-Velocity Outreach Engine',
-    desc:'A fully automated outreach pipeline that researches prospects, personalizes emails at scale, manages follow-up sequences, and tracks replies — all without a human in the loop for routine sends.',
-    tags:['Python','Apollo','GPT-4','Sheets'] },
-  { id:'partners', headline:'100+', metric:'100+', metricLabel:'per day', sub:'partners onboarded / day', title:'Partner Growth Ecosystem',
-    desc:'End-to-end partner onboarding automation: from application intake to contract generation, welcome sequences, and tracking dashboard. Reduced onboarding time from 3 days to under 2 hours.',
-    tags:['n8n','Airtable','DocuSign','Slack'] }
+  { id:'support', headline:'8→1 hr', sub:'daily email handling', title:'Support Operations Scaling Suite',
+    desc:'200+ daily emails triaged, drafted, reviewed. Manual work cut from 8 hours to 1.',
+    metric:'-87.5%', metricLabel:'labor overhead',
+    tags:['Gmail Automation','AI Drafting','Apps Script','Triage Logic'] },
+  { id:'outreach', headline:'1,000+', sub:'emails sent daily', title:'High-Velocity Outreach Engine',
+    desc:'Automated outbound with sender rotation, follow-ups, and performance tracking. Zero manual sending.',
+    metric:'99%', metricLabel:'deliverability',
+    tags:['n8n','Sender Rotation','Reply Suppression','A/B Testing'] },
+  { id:'partners', headline:'100+', sub:'partners onboarded / day', title:'Partner Growth Ecosystem',
+    desc:'Automated onboarding, AI validation, training triggers, daily tracking. Productive within 24 hours.',
+    metric:'<24h', metricLabel:'to productive',
+    tags:['LinkedIn','AI Interview','Apps Script','Live Tracking'] }
 ];
 
-const tagS={fontSize:11,color:'rgba(255,255,255,0.6)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:6,padding:'3px 10px'};
+const tagS = {fontSize:10,border:'1px solid rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.75)',padding:'5px 12px',borderRadius:80,whiteSpace:'nowrap'};
 
 function LayoutA(){
+  const isMobile = window.innerWidth <= 640;
   return (
-    <div style={{display:'flex',flexDirection:'column',gap:16}}>
-      {CASES.map(c=>{
-        const isMobile=window.innerWidth<=640;
-        return (
-          <div key={c.id} style={{background:'#141418',border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,display:'grid',gridTemplateColumns:isMobile?'1fr':'260px 1fr',overflow:'hidden'}}>
-            <div style={{padding:isMobile?'28px 24px':'44px 36px',display:'flex',flexDirection:'column',justifyContent:'center',borderRight:isMobile?'none':'1px solid rgba(255,255,255,0.08)',borderBottom:isMobile?'1px solid rgba(255,255,255,0.08)':'none'}}>
-              <div style={{fontSize:isMobile?40:52,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',marginTop:8,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.sub}</div>
-            </div>
-            <div style={{padding:isMobile?'24px':'36px 40px',display:'flex',flexDirection:'column',justifyContent:'center',gap:14}}>
-              <div style={{fontSize:isMobile?17:19,fontWeight:600,letterSpacing:'-.02em'}}>{c.title}</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',lineHeight:1.65,fontWeight:300}}>{c.desc}</div>
-              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>{c.tags.map(t=><span key={t} style={tagS}>{t}</span>)}</div>
-            </div>
+    <div style={{display:'flex',flexDirection:'column',gap:20,marginTop:48}}>
+      {CASES.map(c=>(
+        <div key={c.id} style={{background:'#141418',border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,display:'grid',gridTemplateColumns:isMobile?'1fr':'260px 1fr',overflow:'hidden'}}>
+          <div style={{padding:isMobile?'28px 24px':'44px 36px',display:'flex',flexDirection:'column',justifyContent:'center',borderRight:isMobile?'none':'1px solid rgba(255,255,255,0.08)',borderBottom:isMobile?'1px solid rgba(255,255,255,0.08)':'none'}}>
+            <div style={{fontSize:isMobile?40:52,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',marginTop:8}}>{c.sub}</div>
           </div>
-        );
-      })}
+          <div style={{padding:isMobile?'24px':'36px 40px',display:'flex',flexDirection:'column',justifyContent:'center',gap:14}}>
+            <div style={{fontSize:isMobile?17:19,fontWeight:600,letterSpacing:'-.02em'}}>{c.title}</div>
+            <div style={{fontSize:14,color:'rgba(255,255,255,0.75)',lineHeight:1.7,fontWeight:300}}>{c.desc}</div>
+            <div style={{display:'flex',flexWrap:'wrap',gap:6}}>{c.tags.map(t=><span key={t} style={tagS}>{t}</span>)}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EmailAnim(){
+  return (
+    <div style={{height:80,position:'relative',overflow:'hidden',marginBottom:8}}>
+      <style dangerouslySetInnerHTML={{__html:`
+        @keyframes emailFly{0%{transform:translateX(0) translateY(0) scale(1);opacity:1}100%{transform:translateX(120px) translateY(-30px) scale(0.5);opacity:0}}
+        @keyframes emailAppear{0%{opacity:0;transform:scale(0.8)}20%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(100px) scale(0.6)}}
+        @keyframes counterUp{0%{content:'0'}100%{content:'200'}}
+        .email-envelope{position:absolute;width:20px;height:14px;border:1.5px solid rgba(255,255,255,0.5);border-radius:2px;animation:emailAppear 1.2s ease-out infinite}
+        .email-envelope::after{content:'';position:absolute;top:0;left:0;right:0;border-top:1.5px solid rgba(255,255,255,0.5);border-left:1.5px solid transparent;border-right:1.5px solid transparent;height:7px;clip-path:polygon(0 0,50% 70%,100% 0)}
+      `}}/>
+      <div style={{position:'absolute',left:8,top:16,display:'flex',flexDirection:'column',gap:2}}>
+        {[0,1,2,3,4,5,6,7].map(i=>(
+          <div key={i} className="email-envelope" style={{
+            position:'relative',
+            left: `${(i%3)*8}px`,
+            animationDelay:`${i*0.15}s`,
+            animationDuration:'1s'
+          }}></div>
+        ))}
+      </div>
+      <div style={{position:'absolute',right:12,bottom:8,fontSize:28,fontWeight:700,color:'rgba(255,255,255,0.08)',letterSpacing:'-.02em'}}>200+/hr</div>
+    </div>
+  );
+}
+
+function SendAnim(){
+  return (
+    <div style={{height:80,position:'relative',overflow:'hidden',marginBottom:8}}>
+      <style dangerouslySetInnerHTML={{__html:`
+        @keyframes sendOut{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:0.6}100%{transform:translateX(180px);opacity:0}}
+        @keyframes blink{0%,100%{opacity:0.3}50%{opacity:1}}
+        .send-dot{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;animation:sendOut 2s linear infinite}
+      `}}/>
+      {/* Origin node */}
+      <div style={{position:'absolute',left:12,top:32,width:24,height:24,borderRadius:'50%',border:'1.5px solid rgba(255,255,255,0.3)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+        <div style={{width:8,height:8,borderRadius:'50%',background:'#fff',animation:'blink 1s ease-in-out infinite'}}></div>
+      </div>
+      {/* Stream of dots representing emails flying out */}
+      {Array.from({length:20}).map((_,i)=>(
+        <div key={i} className="send-dot" style={{
+          left: 36,
+          top: 28 + Math.sin(i*0.8)*14,
+          animationDelay:`${i*0.1}s`,
+          animationDuration:`${1.2+Math.random()*0.8}s`,
+          opacity:0,
+          width: 3+Math.random()*2,
+          height: 3+Math.random()*2,
+        }}></div>
+      ))}
+      {/* Counter watermark */}
+      <div style={{position:'absolute',right:12,bottom:6,fontSize:28,fontWeight:700,color:'rgba(255,255,255,0.08)',letterSpacing:'-.02em'}}>1K/day</div>
+      {/* Account indicators */}
+      <div style={{position:'absolute',right:12,top:8,display:'flex',gap:2}}>
+        {Array.from({length:8}).map((_,i)=>(
+          <div key={i} style={{width:6,height:6,borderRadius:'50%',background:'rgba(255,255,255,0.15)',animation:'blink 2s ease-in-out infinite',animationDelay:`${i*0.25}s`}}></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PipelineAnim(){
+  const stages = ['LinkedIn\nScrape','Auto\nOutreach','AI\nInterview','Score &\nValidate','Onboard','Train &\nTrack'];
+  return (
+    <div style={{height:90,position:'relative',overflow:'hidden',marginBottom:8}}>
+      <style dangerouslySetInnerHTML={{__html:`
+        @keyframes flowPulse{0%{background:rgba(255,255,255,0.06)}50%{background:rgba(255,255,255,0.15)}100%{background:rgba(255,255,255,0.06)}}
+        @keyframes dotTravel{0%{left:0%;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:100%;opacity:0}}
+        @keyframes countUp{0%{opacity:0.4}50%{opacity:1}100%{opacity:0.4}}
+      `}}/>
+      <div style={{display:'flex',alignItems:'center',gap:0,height:60,padding:'0 4px'}}>
+        {stages.map((s,i)=>(
+          <React.Fragment key={i}>
+            {i>0 && (
+              <div style={{width:16,height:1,background:'rgba(255,255,255,0.15)',position:'relative',flexShrink:0}}>
+                <div style={{position:'absolute',width:3,height:3,borderRadius:'50%',background:'#fff',top:-1,animation:`dotTravel 2s ${i*0.33}s linear infinite`}}></div>
+              </div>
+            )}
+            <div style={{
+              flex:1,height:42,borderRadius:6,
+              border:'1px solid rgba(255,255,255,0.1)',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              fontSize:8,color:'rgba(255,255,255,0.6)',textAlign:'center',
+              lineHeight:1.3,padding:'0 2px',whiteSpace:'pre-line',
+              animation:`flowPulse 3s ${i*0.5}s ease-in-out infinite`
+            }}>{s}</div>
+          </React.Fragment>
+        ))}
+      </div>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0 4px',marginTop:4}}>
+        <div style={{fontSize:9,color:'rgba(255,255,255,0.4)'}}>0 manual steps</div>
+        <div style={{fontSize:9,color:'rgba(255,255,255,0.5)',animation:'countUp 2s ease-in-out infinite'}}>→ productive in &lt;24h</div>
+      </div>
     </div>
   );
 }
 
 function LayoutB(){
-  const isMobile=window.innerWidth<=640;
+  const visuals = [<EmailAnim/>, <SendAnim/>, <PipelineAnim/>];
+  const isMobile = window.innerWidth <= 640;
   return (
     <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'repeat(3,1fr)',gap:16,marginTop:48}}>
-      {CASES.map(c=>(
+      {CASES.map((c,i)=>(
         <div key={c.id} style={{background:'#141418',border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,padding:isMobile?'28px 24px':'36px 32px',display:'flex',flexDirection:'column',gap:16}}>
-          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
-            <div>
-              <div style={{fontSize:isMobile?36:44,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
-              <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',marginTop:6,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.sub}</div>
-            </div>
+          {visuals[i]}
+          <div>
+            <div style={{fontSize:isMobile?36:44,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',marginTop:6}}>{c.sub}</div>
           </div>
-          <div style={{fontSize:isMobile?16:17,fontWeight:600,letterSpacing:'-.015em',marginBottom:10}}>{c.title}</div>
-          <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',lineHeight:1.65,fontWeight:300,flex:1}}>{c.desc}</div>
-          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>{c.tags.map(t=><span key={t} style={tagS}>{t}</span>)}</div>
+          <div style={{width:'100%',height:1,background:'rgba(255,255,255,0.08)'}}></div>
+          <div>
+            <div style={{fontSize:isMobile?16:17,fontWeight:600,letterSpacing:'-.015em',marginBottom:10}}>{c.title}</div>
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7,fontWeight:300}}>{c.desc}</div>
+          </div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:'auto'}}>{c.tags.slice(0,3).map(t=><span key={t} style={tagS}>{t}</span>)}</div>
         </div>
       ))}
     </div>
@@ -480,13 +587,13 @@ function LayoutB(){
 }
 
 function LayoutC(){
-  const isMobile=window.innerWidth<=640;
+  const isMobile = window.innerWidth <= 640;
   return (
     <div style={{marginTop:48,border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,overflow:'hidden'}}>
       {CASES.map((c,i)=>(
         <div key={c.id} style={{display:'flex',flexDirection:isMobile?'column':'row',alignItems:isMobile?'flex-start':'center',gap:isMobile?20:40,padding:isMobile?'24px':'32px 40px',background:'#141418',borderBottom:i<2?'1px solid rgba(255,255,255,0.08)':'none'}}>
           <div style={{minWidth:120,textAlign:isMobile?'left':'center'}}>
-            <div style={{fontSize:isMobile?30:36,fontWeight:700,letterSpacing:'-.03em',lineHeight:1}}>{c.headline}</div>
+            <div style={{fontSize:isMobile?30:36,fontWeight:700,letterSpacing:'-.03em',lineHeight:1}}>{c.metric}</div>
             <div style={{fontSize:10,color:'rgba(255,255,255,0.65)',marginTop:4,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.metricLabel}</div>
           </div>
           {!isMobile && <div style={{width:1,height:48,background:'rgba(255,255,255,0.08)'}}></div>}
@@ -501,37 +608,23 @@ function LayoutC(){
   );
 }
 
-const LAYOUTS=[
-  {value:'A',label:'A · Hero Cards'},
-  {value:'B',label:'B · Metric Grid'},
-  {value:'C',label:'C · Minimal Rows'}
-];
-
 function ProofSection(){
-  const [layout,setLayout]=useState('B');
-  const [open,setOpen]=useState(false);
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const L = tweaks.proofLayout;
   return (
     <div>
-      {layout==='A'&&<LayoutA/>}
-      {layout==='B'&&<LayoutB/>}
-      {layout==='C'&&<LayoutC/>}
-
-      {/* Drop me a line panel */}
+      {L==='A' && <LayoutA/>}
+      {L==='B' && <LayoutB/>}
+      {L==='C' && <LayoutC/>}
       <div style={{marginTop:32,padding:'24px 28px',border:'1px solid rgba(255,255,255,0.08)',borderRadius:14,background:'#141418',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:16}}>
         <div style={{fontSize:15,color:'rgba(255,255,255,0.6)',fontWeight:300}}>Curious about others? I'll walk you through what's most relevant to your needs.</div>
-        <a href="mailto:nhivu.hcm.work@gmail.com" style={{fontSize:14,fontWeight:500,color:'#09090b',background:'#fff',padding:'10px 28px',borderRadius:80,textDecoration:'none',whiteSpace:'nowrap'}} onMouseOver={e=>e.target.style.opacity='0.88'} onMouseOut={e=>e.target.style.opacity='1'}>Drop me a line</a>
+        <a href="mailto:nhivu.hcm.work@gmail.com" style={{fontSize:14,fontWeight:500,color:'#09090b',background:'#fff',padding:'10px 28px',borderRadius:80,textDecoration:'none',whiteSpace:'nowrap',transition:'opacity .2s'}} onMouseOver={e=>e.target.style.opacity='0.88'} onMouseOut={e=>e.target.style.opacity='1'}>Drop me a line</a>
       </div>
-
-      {/* Layout switcher */}
-      <div style={{marginTop:24,display:'flex',alignItems:'center',gap:8,justifyContent:'flex-end'}}>
-        <span style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>Layout:</span>
-        {LAYOUTS.map(l=>(
-          <button key={l.value} onClick={()=>setLayout(l.value)}
-            style={{fontSize:12,padding:'5px 14px',borderRadius:20,border:'1px solid rgba(255,255,255,'+(layout===l.value?'0.25':'0.08')+')',background:layout===l.value?'rgba(255,255,255,0.08)':'none',color:layout===l.value?'#fff':'rgba(255,255,255,0.4)',cursor:'pointer',fontFamily:'inherit',transition:'all .2s'}}>
-            {l.label}
-          </button>
-        ))}
-      </div>
+      <TweaksPanel title="Layout Options">
+        <TweakRadio label="Case Study Layout" value={L}
+          options={[{label:'A · Hero Cards',value:'A'},{label:'B · Metric Grid',value:'B'},{label:'C · Minimal Rows',value:'C'}]}
+          onChange={v=>setTweak('proofLayout',v)} />
+      </TweaksPanel>
     </div>
   );
 }
@@ -539,6 +632,10 @@ function ProofSection(){
 ReactDOM.createRoot(document.getElementById('proof-mount')).render(<ProofSection/>);
 </script>
 
+<script>
+const revEls=document.querySelectorAll('.reveal');
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target)}})},{threshold:.1});
+revEls.forEach(el=>ro.observe(el));
+</script>
 </body>
 </html>
-<!-- deployed Fri May 29 05:02:23 UTC 2026 -->
