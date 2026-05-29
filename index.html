@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Long Nhi (Yiyi) · Executive Assistant — Dedicated For You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8JYBG60X76"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8JYBG60X76');
+</script>
+
+<!-- UTM / Ref Tracker -->
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref') || params.get('utm_source') || params.get('utm_campaign') || '';
+  var referrer = document.referrer || 'direct';
+  var landedAt = new Date().toISOString();
+  window._yiyiTracking = { ref: ref, referrer: referrer, landedAt: landedAt };
+
+  // Fire GA custom event for identified visits
+  if(ref) {
+    setTimeout(function(){
+      if(window.gtag) gtag('event', 'identified_visit', { ref: ref, referrer: referrer });
+    }, 1000);
+  }
+
+  // Track time on page
+  window._yiyiStart = Date.now();
+})();
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--surface:#0f0f12;--card:#141418;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#fff;--muted:rgba(255,255,255,0.4);--muted2:rgba(255,255,255,0.6);
+  --radius:80px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.video-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden}
+.video-bg video{width:100%;height:100%;object-fit:cover}
+.blur-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);-webkit-mask-image:linear-gradient(to top,black 0%,transparent 45%);mask-image:linear-gradient(to top,black 0%,transparent 45%)}
+.dark-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(9,9,11,0.3) 0%,rgba(9,9,11,0.6) 50%,rgba(9,9,11,0.95) 100%)}
+
+.liquid-glass{background:rgba(255,255,255,0.01);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);border:none;box-shadow:inset 0 1px 1px rgba(255,255,255,0.1);position:relative;overflow:hidden}
+.liquid-glass::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.4px;background:linear-gradient(180deg,rgba(255,255,255,0.45) 0%,rgba(255,255,255,0.15) 20%,rgba(255,255,255,0) 40%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.15) 80%,rgba(255,255,255,0.45) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none}
+
+@keyframes blurFadeUp{from{opacity:0;filter:blur(20px);transform:translateY(40px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
+.bfu{opacity:0;animation:blurFadeUp 1s ease-out forwards}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(9,9,11,0.4);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-logo{width:32px;height:32px;border-radius:8px;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.nav-name{font-size:15px;font-weight:500;color:var(--muted2)}.nav-name b{color:var(--text);font-weight:600}
+.nav-contact{display:flex;align-items:center;gap:20px;font-size:12px;color:var(--muted);opacity:0.55}
+.nav-contact a{color:var(--muted);text-decoration:none;transition:color .2s}.nav-contact a:hover{color:var(--text)}
+.nav-contact .sep{width:1px;height:12px;background:rgba(255,255,255,0.15)}
+.nav-cta{font-size:13px;font-weight:500;color:var(--text);padding:9px 24px;border-radius:var(--radius);cursor:default}
+@media(max-width:768px){nav{padding:14px 16px;gap:8px}.nav-contact{display:none}.nav-name{font-size:13px}}
+
+.hero{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:0 48px 80px;padding-top:100px;max-width:1200px}
+.hero-eyebrow{font-size:14px;font-weight:400;color:var(--muted2);margin-bottom:28px}
+.hero h1{font-size:clamp(36px,6vw,68px);font-weight:600;line-height:1.1;letter-spacing:-.035em;max-width:800px}
+.hero h1 .dim{color:var(--muted2)}
+.hero-sub{font-size:clamp(15px,1.5vw,17px);color:var(--muted2);max-width:560px;margin-top:28px;line-height:1.8;font-weight:300}
+.hero-role{display:inline-block;font-size:13px;color:var(--muted);letter-spacing:.04em;margin-top:20px}
+.hero-actions{display:flex;gap:12px;margin-top:40px;flex-wrap:wrap}
+.btn-primary{font-family:inherit;font-size:14px;font-weight:500;color:var(--bg);background:var(--text);padding:12px 32px;border-radius:var(--radius);border:none;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{opacity:.88}
+.btn-glass{font-family:inherit;font-size:14px;font-weight:500;color:var(--text);padding:12px 32px;border-radius:var(--radius);cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+@media(max-width:640px){.hero{padding:0 20px 56px;padding-top:80px}.hero-actions{flex-direction:column;width:100%}.btn-primary,.btn-glass{width:100%;justify-content:center;text-align:center}}
+
+.content-body{position:relative;z-index:10;background:var(--bg)}
+.section{padding:100px 48px}
+.container{max-width:960px;margin:0 auto}
+.section-eyebrow{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px}
+.section-title{font-size:clamp(28px,4.5vw,52px);font-weight:600;letter-spacing:-.035em;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--muted2);line-height:1.8;max-width:600px;font-weight:300}
+@media(max-width:640px){.section{padding:56px 20px}}
+
+.dark-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+.about-grid{display:grid;grid-template-columns:auto 1fr;gap:48px;margin-top:48px;align-items:start}
+.about-card{border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.about-avatar{width:56px;height:56px;border-radius:14px;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
+.about-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.about-meta-item{border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.about-meta-n{font-size:16px;font-weight:600;line-height:1}
+.about-meta-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.about-text{font-size:15px;color:var(--muted2);line-height:1.85;font-weight:300;max-width:640px}
+.about-text b{color:var(--text);font-weight:500}
+@media(max-width:720px){.about-grid{grid-template-columns:1fr}.about-meta{grid-template-columns:repeat(3,1fr)}.about-card{padding:24px}}
+
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.fit-card{border:1px solid var(--border);border-radius:16px;padding:32px}
+.fit-title{font-size:16px;font-weight:600;margin-bottom:10px;letter-spacing:-.01em}
+.fit-desc{font-size:14px;color:var(--muted2);line-height:1.7;font-weight:300}
+@media(max-width:640px){.fit-grid{grid-template-columns:1fr}.fit-card{padding:24px}}
+
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px}
+.tool-chip{border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.tool-name{font-size:14px;font-weight:500}
+.tool-cat{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:640px){.tools-grid{grid-template-columns:repeat(2,1fr)}.tools-two-col{grid-template-columns:1fr !important}}
+
+.cta-section{position:relative;padding:80px 48px;overflow:hidden;background:var(--surface);border-top:1px solid var(--border)}
+.cta-card-inner{position:relative;border-radius:24px;padding:64px 56px;text-align:center;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);z-index:1;overflow:hidden}
+.cta-title{font-size:clamp(32px,5vw,56px);font-weight:600;letter-spacing:-.035em;margin-bottom:16px}
+.cta-sub{font-size:16px;color:var(--muted2);line-height:1.7;max-width:480px;margin:0 auto;font-weight:300}
+.cta-actions{display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.crow{display:flex;align-items:baseline;gap:8px;justify-content:center;margin-bottom:8px}
+.crow-val{font-size:clamp(22px,3vw,32px);font-weight:600;letter-spacing:-.03em}
+.crow-lbl{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;min-width:46px;text-align:right}
+@keyframes borderRotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes lineExpand{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@media(max-width:640px){.cta-section{padding:60px 20px 80px}.cta-card-inner{padding:48px 24px !important}.crow{flex-direction:column;gap:4px}.crow-lbl{text-align:center;min-width:unset}.cta-actions{flex-direction:column;width:100%}.cta-actions .btn-primary,.cta-actions .btn-glass{width:100%;justify-content:center}}
+
+footer{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:24px 48px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+@media(max-width:640px){footer{padding:20px 16px;flex-direction:column;align-items:center;text-align:center;gap:12px}}
+</style>
+</head>
+<body>
+
+<!-- Video Background -->
+<div class="video-bg">
+  <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=60">
+    <source src="https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-1573/1080p.mp4" type="video/mp4"/>
+  </video>
+</div>
+<div class="blur-overlay"></div>
+<div class="dark-overlay"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-left">
+    <div class="nav-logo">YY</div>
+    <div class="nav-name"><b>Long Nhi (Yiyi)</b></div>
+    <div class="nav-contact">
+      <span class="sep"></span>
+      <a href="mailto:nhivu.hcm.work@gmail.com">nhivu.hcm.work@gmail.com</a>
+      <span class="sep"></span>
+      <a href="tel:+84903913625">+84 903 913 625</a>
+    </div>
+  </div>
+  <div class="bfu" style="animation-delay:150ms;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);letter-spacing:.01em">Dedicated For You</div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-eyebrow bfu" style="animation-delay:100ms">Executive Assistant · Ho Chi Minh City, GMT+7</div>
+  <h1 class="bfu" style="animation-delay:300ms">Hi, I'm Yiyi</h1>
+  <p class="hero-sub bfu" style="animation-delay:500ms">
+    Usually, I wouldn't send a resume. As I believe a person could not be judged through a piece of paper.<br><br>
+    Instead, I built this<br><br>
+    Because the best way to show you what I do and save your team time — is to <b style="color:#fff">do it right now, for myself.</b>
+  </p>
+  <div class="hero-actions bfu" style="animation-delay:700ms">
+    <a href="https://rebrand.ly/yiyi-linkedin" target="_blank" rel="noopener" class="btn-primary">Get in Touch</a>
+    <a href="#proof" class="btn-glass liquid-glass" style="border-radius:var(--radius)">See My Work</a>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content-body">
+
+  <!-- Systems -->
+  <section class="section" id="proof">
+    <div class="container">
+      <div class="section-eyebrow reveal">What I build</div>
+      <h2 class="section-title reveal reveal-d1">Here are a few.</h2>
+      <p class="section-sub reveal reveal-d2">I've built and shipped more than what's shown here. These are three I can share publicly — all running live for real teams.</p>
+      <div id="proof-mount" style="margin-top:48px"></div>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section class="section dark-section">
+    <div class="container">
+      <div class="section-eyebrow reveal">Stack</div>
+      <h2 class="section-title reveal reveal-d1">Tools I use daily</h2>
+      <div class="reveal reveal-d2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px" class="tools-two-col">
+        <div>
+          <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px">AI &amp; Reasoning</div>
+          <div class="tools-grid">
+            <div class="tool-chip"><div class="tool-name">Claude</div><div class="tool-cat">Reasoning</div></div>
+            <div class="tool-chip"><div class="tool-name">ChatGPT</div><div class="tool-cat">Drafting</div></div>
+            <div class="tool-chip"><div class="tool-name">Perplexity</div><div class="tool-cat">Research</div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px">Automation &amp; Data</div>
+          <div class="tools-grid">
+            <div class="tool-chip"><div class="tool-name">n8n</div><div class="tool-cat">Automation</div></div>
+            <div class="tool-chip"><div class="tool-name">Python</div><div class="tool-cat">Scripting</div></div>
+            <div class="tool-chip"><div class="tool-name">Sheets</div><div class="tool-cat">Data</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal reveal-d3" style="margin-top:20px;font-size:14px;color:var(--muted2);font-weight:300">…and many more. To me, the stack is never the point — the outcome is.</div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section dark-section">
+    <div class="container">
+      <div class="section-eyebrow reveal">Background</div>
+      <div class="about-grid reveal reveal-d1">
+        <div class="about-card">
+          <div class="about-avatar">Y</div>
+          <div style="font-size:16px;font-weight:600">Long Nhi (Yiyi)</div>
+          <div style="font-size:13px;color:var(--muted2);margin-top:2px">Marketing Background · Operations &amp; AI</div>
+          <div class="about-meta">
+            <div class="about-meta-item"><div class="about-meta-n">5+</div><div class="about-meta-l">Years</div></div>
+            <div class="about-meta-item"><div class="about-meta-n">GMT+7</div><div class="about-meta-l">Timezone</div></div>
+            <div class="about-meta-item"><div class="about-meta-n">Remote</div><div class="about-meta-l">Ready</div></div>
+          </div>
+        </div>
+        <div class="about-text">
+          I come from a <b>marketing background</b> — which means I think about everything through the lens of the customer. Who are they? What do they need? Where's the friction?<br><br>
+          That mindset carries into everything I do now. Whether I'm designing a workflow, automating outreach, or building a tracking system — <b>the customer is always at the center.</b><br><br>
+          Over the last few years I've layered hands-on skills in AI and workflow automation on top of that foundation. I don't just use tools — I identify the inefficiency first, then pick the right tool to fix it. Whether that's n8n, a Python script, or Claude reasoning over messy data.<br><br>
+          I'm comfortable working independently in a remote environment, managing competing priorities, and communicating clearly with stakeholders.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fit -->
+  <section class="section">
+    <div class="container">
+      <div class="section-eyebrow reveal">The Match</div>
+      <h2 class="section-title reveal reveal-d1">Why I am (potentially)<br>the right fit.</h2>
+      <p class="section-sub reveal reveal-d2">You're not looking for a traditional employee — you need someone who lives and breathes AI as a daily working tool. That's exactly how I operate.</p>
+      <div class="fit-grid reveal reveal-d3">
+        <div class="fit-card">
+          <div class="fit-title">AI-native, not AI-curious</div>
+          <div class="fit-desc">I don't experiment with AI on weekends. I use it to run actual systems daily — from automated candidate tracking to live data pipelines. It's my primary tool, not a side skill.</div>
+        </div>
+        <div class="fit-card">
+          <div class="fit-title">I've done the operational work</div>
+          <div class="fit-desc">Scheduling, inbox management, partner onboarding, report generation — I've done all of it, and then automated most of it. I know what the job looks like before and after AI.</div>
+        </div>
+        <div class="fit-card">
+          <div class="fit-title">Based in Vietnam · GMT+7</div>
+          <div class="fit-desc">I'm based in Ho Chi Minh City, working in the GMT+7 timezone — which should align well with your team's working hours. Minimal lag, easy coordination.</div>
+        </div>
+        <div class="fit-card">
+          <div class="fit-title">I find the problem first</div>
+          <div class="fit-desc">Before I build anything, I make sure I understand what's actually slow or broken. The solution comes second. This keeps me from over-engineering things that don't need it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div style="position:absolute;inset:0;overflow:hidden;z-index:0">
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.06);animation:none"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:1">
+      <!-- Rotating border CTA card -->
+      <div style="position:relative;border-radius:24px;overflow:hidden">
+        <div style="position:absolute;inset:-2px;border-radius:26px;background:conic-gradient(from var(--angle,0deg),transparent 0%,rgba(255,255,255,0.5) 10%,transparent 20%);animation:borderRotate 4s linear infinite;z-index:0"></div>
+        <div class="cta-card-inner" style="margin:2px">
+          <div style="display:flex;align-items:center;justify-content:center;gap:40px;margin-bottom:40px;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div class="crow"><span class="crow-val">5+</span></div>
+              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Years remote</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border)"></div>
+            <div style="text-align:center">
+              <div class="crow"><span class="crow-val">3</span></div>
+              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Live systems</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border)"></div>
+            <div style="text-align:center">
+              <div class="crow"><span class="crow-val">GMT+7</span></div>
+              <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Timezone</div>
+            </div>
+          </div>
+          <h2 class="cta-title">Let's talk.</h2>
+          <p class="cta-sub">If this feels like the kind of person you need — reach out. No CV, no cover letter. Just a conversation.</p>
+          <div class="cta-actions">
+            <a href="https://rebrand.ly/yiyi-linkedin" target="_blank" rel="noopener" class="btn-primary" style="font-size:16px;padding:14px 40px">Connect on LinkedIn</a>
+            <a href="mailto:nhivu.hcm.work@gmail.com" class="btn-glass liquid-glass" style="border-radius:var(--radius);font-size:16px;padding:14px 40px">Email Me</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end content-body -->
+
+<!-- Footer -->
+<footer>
+  <span>Long Nhi (Yiyi) · <a href="#" id="feedback-trigger" style="color:rgba(255,255,255,0.6);text-decoration:underline;text-underline-offset:2px;cursor:pointer;transition:color .2s">How was my presentation?</a></span>
+  <span style="color:rgba(255,255,255,0.25)">Ho Chi Minh City, Vietnam</span>
+</footer>
+
+<!-- Feedback Modal -->
+<div id="feedback-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);align-items:center;justify-content:center">
+  <div style="background:#141418;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px;max-width:440px;width:calc(100% - 40px);position:relative">
+    <button id="feedback-close" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">✕</button>
+    <div id="feedback-content">
+      <div style="font-size:18px;font-weight:600;margin-bottom:8px">Your honest take</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px">Anonymous. One sentence is enough.</div>
+      <textarea id="feedback-text" placeholder="One sentence to help me grow as a better professional..." style="width:100%;height:80px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-family:inherit;font-size:14px;resize:none;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='rgba(255,255,255,0.25)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+      <button type="button" id="feedback-submit" style="margin-top:16px;width:100%;padding:13px;border-radius:80px;border:none;background:#fff;color:#09090b;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s;opacity:0.4;pointer-events:none" disabled>Send Feedback</button>
+    </div>
+    <div id="feedback-thanks" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:32px;margin-bottom:16px">🙏</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px">Thank you.</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.5)">That genuinely helps.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Feedback modal logic
+var modal=document.getElementById('feedback-modal'),
+    trigger=document.getElementById('feedback-trigger'),
+    close=document.getElementById('feedback-close'),
+    txt=document.getElementById('feedback-text'),
+    btn=document.getElementById('feedback-submit');
+
+trigger.addEventListener('click',function(e){e.preventDefault();modal.style.display='flex';});
+close.addEventListener('click',function(){modal.style.display='none';});
+modal.addEventListener('click',function(e){if(e.target===modal)modal.style.display='none';});
+txt.addEventListener('input',function(){
+  var ok=this.value.trim().length>5;
+  btn.disabled=!ok;btn.style.opacity=ok?'1':'0.4';btn.style.pointerEvents=ok?'auto':'none';
+});
+
+btn.addEventListener('click',function(){
+  var t=window._yiyiTracking||{};
+  var timeOnPage=Math.round((Date.now()-window._yiyiStart)/1000)+'s';
+  var subject='Yiyi Portfolio Feedback'+(t.ref?' — via '+t.ref:'');
+
+  // GA event
+  if(window.gtag) gtag('event','feedback_submitted',{ref:t.ref||'direct',time_on_page:timeOnPage});
+
+  // FormSubmit
+  var form=document.createElement('form');
+  form.method='POST';
+  form.action='https://formsubmit.co/nhivu.hcm.work@gmail.com';
+  form.style.display='none';
+
+  var fields={
+    '_subject': subject,
+    '_captcha': 'false',
+    '_template': 'table',
+    'feedback': txt.value,
+    'ref': t.ref||'direct',
+    'referrer': t.referrer||'direct',
+    'time_on_page': timeOnPage,
+    'device': navigator.userAgent.match(/Mobile/)? 'Mobile':'Desktop',
+    'landed_at': t.landedAt||'',
+    'page_url': window.location.href
+  };
+
+  for(var k in fields){
+    var i=document.createElement('input');
+    i.type='hidden';i.name=k;i.value=fields[k];
+    form.appendChild(i);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+
+  document.getElementById('feedback-content').style.display='none';
+  document.getElementById('feedback-thanks').style.display='block';
+  setTimeout(function(){modal.style.display='none';
+    document.getElementById('feedback-content').style.display='block';
+    document.getElementById('feedback-thanks').style.display='none';
+    txt.value='';btn.disabled=true;btn.style.opacity='0.4';btn.style.pointerEvents='none';
+  },2500);
+});
+
+// Scroll reveal
+var revEls=document.querySelectorAll('.reveal');
+var ro=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+},{threshold:.1});
+revEls.forEach(function(el){ro.observe(el);});
+
+// CTA border animation via CSS variable
+(function(){
+  var angle=0;
+  var card=document.querySelector('.cta-section [style*="conic-gradient"]');
+  if(!card)return;
+  function tick(){angle=(angle+0.5)%360;card.style.setProperty('--angle',angle+'deg');requestAnimationFrame(tick);}
+  tick();
+})();
+</script>
+
+<!-- React: Proof Section -->
+<script type="text/babel">
+const {useState,useEffect} = React;
+
+const CASES = [
+  { id:'support', headline:'8→1 hr', metric:'8→1hr', metricLabel:'daily', sub:'daily email handling', title:'Support Operations Scaling Suite',
+    desc:'Built a triage + routing system in n8n that reads every inbound support ticket, classifies it by urgency and topic, drafts a response using Claude, and routes to the right person. What used to take a team 8 hours now runs in under 1.',
+    tags:['n8n','Claude API','Gmail','Notion'] },
+  { id:'outreach', headline:'1,000+', metric:'1,000+', metricLabel:'per day', sub:'emails sent daily', title:'High-Velocity Outreach Engine',
+    desc:'A fully automated outreach pipeline that researches prospects, personalizes emails at scale, manages follow-up sequences, and tracks replies — all without a human in the loop for routine sends.',
+    tags:['Python','Apollo','GPT-4','Sheets'] },
+  { id:'partners', headline:'100+', metric:'100+', metricLabel:'per day', sub:'partners onboarded / day', title:'Partner Growth Ecosystem',
+    desc:'End-to-end partner onboarding automation: from application intake to contract generation, welcome sequences, and tracking dashboard. Reduced onboarding time from 3 days to under 2 hours.',
+    tags:['n8n','Airtable','DocuSign','Slack'] }
+];
+
+const tagS={fontSize:11,color:'rgba(255,255,255,0.6)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:6,padding:'3px 10px'};
+
+function LayoutA(){
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:16}}>
+      {CASES.map(c=>{
+        const isMobile=window.innerWidth<=640;
+        return (
+          <div key={c.id} style={{background:'#141418',border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,display:'grid',gridTemplateColumns:isMobile?'1fr':'260px 1fr',overflow:'hidden'}}>
+            <div style={{padding:isMobile?'28px 24px':'44px 36px',display:'flex',flexDirection:'column',justifyContent:'center',borderRight:isMobile?'none':'1px solid rgba(255,255,255,0.08)',borderBottom:isMobile?'1px solid rgba(255,255,255,0.08)':'none'}}>
+              <div style={{fontSize:isMobile?40:52,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
+              <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',marginTop:8,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.sub}</div>
+            </div>
+            <div style={{padding:isMobile?'24px':'36px 40px',display:'flex',flexDirection:'column',justifyContent:'center',gap:14}}>
+              <div style={{fontSize:isMobile?17:19,fontWeight:600,letterSpacing:'-.02em'}}>{c.title}</div>
+              <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',lineHeight:1.65,fontWeight:300}}>{c.desc}</div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>{c.tags.map(t=><span key={t} style={tagS}>{t}</span>)}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function LayoutB(){
+  const isMobile=window.innerWidth<=640;
+  return (
+    <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'repeat(3,1fr)',gap:16,marginTop:48}}>
+      {CASES.map(c=>(
+        <div key={c.id} style={{background:'#141418',border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,padding:isMobile?'28px 24px':'36px 32px',display:'flex',flexDirection:'column',gap:16}}>
+          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
+            <div>
+              <div style={{fontSize:isMobile?36:44,fontWeight:700,letterSpacing:'-.04em',lineHeight:1}}>{c.headline}</div>
+              <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',marginTop:6,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.sub}</div>
+            </div>
+          </div>
+          <div style={{fontSize:isMobile?16:17,fontWeight:600,letterSpacing:'-.015em',marginBottom:10}}>{c.title}</div>
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',lineHeight:1.65,fontWeight:300,flex:1}}>{c.desc}</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>{c.tags.map(t=><span key={t} style={tagS}>{t}</span>)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LayoutC(){
+  const isMobile=window.innerWidth<=640;
+  return (
+    <div style={{marginTop:48,border:'1px solid rgba(255,255,255,0.08)',borderRadius:16,overflow:'hidden'}}>
+      {CASES.map((c,i)=>(
+        <div key={c.id} style={{display:'flex',flexDirection:isMobile?'column':'row',alignItems:isMobile?'flex-start':'center',gap:isMobile?20:40,padding:isMobile?'24px':'32px 40px',background:'#141418',borderBottom:i<2?'1px solid rgba(255,255,255,0.08)':'none'}}>
+          <div style={{minWidth:120,textAlign:isMobile?'left':'center'}}>
+            <div style={{fontSize:isMobile?30:36,fontWeight:700,letterSpacing:'-.03em',lineHeight:1}}>{c.headline}</div>
+            <div style={{fontSize:10,color:'rgba(255,255,255,0.65)',marginTop:4,textTransform:'uppercase',letterSpacing:'.06em'}}>{c.metricLabel}</div>
+          </div>
+          {!isMobile && <div style={{width:1,height:48,background:'rgba(255,255,255,0.08)'}}></div>}
+          <div style={{flex:1}}>
+            <div style={{fontSize:isMobile?16:18,fontWeight:600,letterSpacing:'-.015em',marginBottom:6}}>{c.title}</div>
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.7)',lineHeight:1.6,fontWeight:300}}>{c.desc}</div>
+          </div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6,maxWidth:isMobile?'100%':200,justifyContent:isMobile?'flex-start':'flex-end'}}>{c.tags.slice(0,3).map(t=><span key={t} style={tagS}>{t}</span>)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const LAYOUTS=[
+  {value:'A',label:'A · Hero Cards'},
+  {value:'B',label:'B · Metric Grid'},
+  {value:'C',label:'C · Minimal Rows'}
+];
+
+function ProofSection(){
+  const [layout,setLayout]=useState('B');
+  const [open,setOpen]=useState(false);
+  return (
+    <div>
+      {layout==='A'&&<LayoutA/>}
+      {layout==='B'&&<LayoutB/>}
+      {layout==='C'&&<LayoutC/>}
+
+      {/* Drop me a line panel */}
+      <div style={{marginTop:32,padding:'24px 28px',border:'1px solid rgba(255,255,255,0.08)',borderRadius:14,background:'#141418',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:16}}>
+        <div style={{fontSize:15,color:'rgba(255,255,255,0.6)',fontWeight:300}}>Curious about others? I'll walk you through what's most relevant to your needs.</div>
+        <a href="mailto:nhivu.hcm.work@gmail.com" style={{fontSize:14,fontWeight:500,color:'#09090b',background:'#fff',padding:'10px 28px',borderRadius:80,textDecoration:'none',whiteSpace:'nowrap'}} onMouseOver={e=>e.target.style.opacity='0.88'} onMouseOut={e=>e.target.style.opacity='1'}>Drop me a line</a>
+      </div>
+
+      {/* Layout switcher */}
+      <div style={{marginTop:24,display:'flex',alignItems:'center',gap:8,justifyContent:'flex-end'}}>
+        <span style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>Layout:</span>
+        {LAYOUTS.map(l=>(
+          <button key={l.value} onClick={()=>setLayout(l.value)}
+            style={{fontSize:12,padding:'5px 14px',borderRadius:20,border:'1px solid rgba(255,255,255,'+(layout===l.value?'0.25':'0.08')+')',background:layout===l.value?'rgba(255,255,255,0.08)':'none',color:layout===l.value?'#fff':'rgba(255,255,255,0.4)',cursor:'pointer',fontFamily:'inherit',transition:'all .2s'}}>
+            {l.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('proof-mount')).render(<ProofSection/>);
+</script>
+
+</body>
+</html>
