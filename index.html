@@ -608,6 +608,85 @@ function LayoutC(){
   );
 }
 
+function ChallengeForm(){
+  const [email,setEmail]=useState('');
+  const [focus,setFocus]=useState('');
+  const [status,setStatus]=useState('idle'); // idle | sending | done | error
+  const canSubmit=email.trim().length>4 && focus.trim().length>10;
+
+  function handleSubmit(){
+    if(!canSubmit||status==='sending') return;
+    setStatus('sending');
+    var t=window._yiyiTracking||{};
+    var fd=new FormData();
+    fd.append('_subject','Yiyi — Someone wants to connect'+(t.ref?' (via '+t.ref+')':''));
+    fd.append('_captcha','false');
+    fd.append('_template','table');
+    fd.append('_autoresponse','Hi! I\'ve received your message and I\'ll get back to you shortly with thoughts on what you shared. Looking forward to the conversation. — Yiyi');
+    fd.append('email',email);
+    fd.append('focus_area',focus);
+    fd.append('ref',t.ref||'direct');
+    fd.append('referrer',t.referrer||'direct');
+    fd.append('time_on_page',Math.round((Date.now()-window._yiyiStart)/1000)+'s');
+    fd.append('device',navigator.userAgent.match(/Mobile/)?'Mobile':'Desktop');
+    fetch('https://formsubmit.co/ajax/nhivu.hcm.work@gmail.com',{method:'POST',body:fd,headers:{'Accept':'application/json'}})
+      .then(r=>r.json())
+      .then(()=>{
+        setStatus('done');
+        if(window.gtag) gtag('event','challenge_submitted',{ref:t.ref||'direct'});
+      })
+      .catch(()=>setStatus('error'));
+  }
+
+  if(status==='done') return (
+    <div style={{marginTop:32,padding:'32px',border:'1px solid rgba(255,255,255,0.08)',borderRadius:14,background:'#141418',textAlign:'center'}}>
+      <div style={{fontSize:28,marginBottom:12}}>🙏</div>
+      <div style={{fontSize:16,fontWeight:600,marginBottom:8}}>Got it — thank you.</div>
+      <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',fontWeight:300}}>Check your inbox — I've sent you a confirmation. I'll follow up personally shortly.</div>
+    </div>
+  );
+
+  return (
+    <div style={{marginTop:32,border:'1px solid rgba(255,255,255,0.08)',borderRadius:14,background:'#141418',overflow:'hidden'}}>
+      <div style={{padding:'28px 28px 0'}}>
+        <div style={{fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.4)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:14}}>Want to go deeper?</div>
+        <div style={{fontSize:18,fontWeight:600,letterSpacing:'-.02em',marginBottom:8}}>Spend 15–30 min researching my background.</div>
+        <div style={{fontSize:14,color:'rgba(255,255,255,0.55)',lineHeight:1.75,fontWeight:300,marginBottom:20}}>
+          Use Claude or ChatGPT. Then come back and tell me:<br/>
+          <span style={{color:'rgba(255,255,255,0.8)'}}>① One thing you think I'm missing — and what you'd do instead.</span><br/>
+          <span style={{color:'rgba(255,255,255,0.8)'}}>② One thing you think I should double down on.</span>
+        </div>
+      </div>
+      <div style={{padding:'0 28px 28px',display:'flex',flexDirection:'column',gap:12}}>
+        <input
+          type="email"
+          placeholder="Your email"
+          value={email}
+          onChange={e=>setEmail(e.target.value)}
+          style={{width:'100%',padding:'12px 16px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,color:'#fff',fontFamily:'inherit',fontSize:14,outline:'none',transition:'border-color .2s'}}
+          onFocus={e=>e.target.style.borderColor='rgba(255,255,255,0.3)'}
+          onBlur={e=>e.target.style.borderColor='rgba(255,255,255,0.1)'}
+        />
+        <textarea
+          placeholder="Share your take — what area or issue do you want me to focus on?"
+          value={focus}
+          onChange={e=>setFocus(e.target.value)}
+          rows={3}
+          style={{width:'100%',padding:'12px 16px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,color:'#fff',fontFamily:'inherit',fontSize:14,outline:'none',resize:'none',lineHeight:1.6,transition:'border-color .2s'}}
+          onFocus={e=>e.target.style.borderColor='rgba(255,255,255,0.3)'}
+          onBlur={e=>e.target.style.borderColor='rgba(255,255,255,0.1)'}
+        />
+        <button
+          onClick={handleSubmit}
+          disabled={!canSubmit||status==='sending'}
+          style={{padding:'12px',borderRadius:80,border:'none',background:'#fff',color:'#09090b',fontFamily:'inherit',fontSize:14,fontWeight:500,cursor:canSubmit?'pointer':'default',opacity:canSubmit?1:0.35,transition:'opacity .2s'}}
+        >{status==='sending'?'Sending…':'Send — I'll get back to you'}</button>
+        {status==='error'&&<div style={{fontSize:13,color:'rgba(255,100,100,0.8)',textAlign:'center'}}>Something went wrong. Try emailing me directly at nhivu.hcm.work@gmail.com</div>}
+      </div>
+    </div>
+  );
+}
+
 function ProofSection(){
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const L = tweaks.proofLayout;
@@ -616,10 +695,7 @@ function ProofSection(){
       {L==='A' && <LayoutA/>}
       {L==='B' && <LayoutB/>}
       {L==='C' && <LayoutC/>}
-      <div style={{marginTop:32,padding:'24px 28px',border:'1px solid rgba(255,255,255,0.08)',borderRadius:14,background:'#141418',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:16}}>
-        <div style={{fontSize:15,color:'rgba(255,255,255,0.6)',fontWeight:300}}>Curious about others? I'll walk you through what's most relevant to your needs.</div>
-        <a href="mailto:nhivu.hcm.work@gmail.com" style={{fontSize:14,fontWeight:500,color:'#09090b',background:'#fff',padding:'10px 28px',borderRadius:80,textDecoration:'none',whiteSpace:'nowrap',transition:'opacity .2s'}} onMouseOver={e=>e.target.style.opacity='0.88'} onMouseOut={e=>e.target.style.opacity='1'}>Drop me a line</a>
-      </div>
+      <ChallengeForm/>
       <TweaksPanel title="Layout Options">
         <TweakRadio label="Case Study Layout" value={L}
           options={[{label:'A · Hero Cards',value:'A'},{label:'B · Metric Grid',value:'B'},{label:'C · Minimal Rows',value:'C'}]}
