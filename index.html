@@ -6,9 +6,15 @@
 <title>Long Nhi (Yiyi) · Executive Assistant — Dedicated For You</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <!-- Vercel Analytics -->
-<script defer src="/_vercel/insights/script.js"></script>
+<script>
+  if (!location.hostname.includes('claudeusercontent') && location.protocol !== 'file:') {
+    var _vi = document.createElement('script');
+    _vi.defer = true; _vi.src = '/_vercel/insights/script.js';
+    document.head.appendChild(_vi);
+  }
+</script>
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8JYBG60X76"></script>
@@ -134,6 +140,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);font-weight:300}
 @media(max-width:640px){footer{padding:20px 16px;flex-direction:column;align-items:center;text-align:center;gap:12px}}
+
+/* BUILD BOARD */
+.board-canvas{position:relative;background-image:radial-gradient(rgba(255,255,255,0.05) 1px,transparent 1px);background-size:22px 22px;background-position:center;border-radius:20px;padding:8px}
+@keyframes bbPop{from{opacity:0;transform:scale(0.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes bbFade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
@@ -184,6 +195,18 @@ footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify
     <h2 class="section-title reveal reveal-d1">Here are a few.</h2>
     <p class="section-sub reveal reveal-d2">I've built and shipped more than what's shown here. These are three I can share publicly — all running live for real teams.</p>
     <div id="proof-mount" class="reveal reveal-d3"></div>
+  </div>
+</section>
+
+<!-- THE BUILD BOARD -->
+<section class="section" id="board">
+  <div class="container">
+    <div class="section-eyebrow reveal">Running Log</div>
+    <h2 class="section-title reveal reveal-d1">I still keep improving myself.</h2>
+    <p class="section-sub reveal reveal-d2">The three above are my proven, deep-cut systems. This is everything new — the log of what I'm learning and building right now, added the moment I ship it. Got a task you'd hand me? Brief it in.</p>
+    <div class="board-canvas reveal reveal-d3">
+      <div id="board-mount"></div>
+    </div>
   </div>
 </section>
 
@@ -251,8 +274,18 @@ footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify
   </div>
 </section>
 
-<!-- WHY THIS ROLE -->
+<!-- FRESH EYES -->
 <section class="section">
+  <div class="container">
+    <div class="section-eyebrow reveal">A Standing Offer</div>
+    <h2 class="section-title reveal reveal-d1">Let me put it to work for you.</h2>
+    <p class="section-sub reveal reveal-d2">The fastest way to know if I'm a fit is to let me look at your actual business — no pitch, just a useful perspective.</p>
+    <div id="fresheyes-mount" class="reveal reveal-d2"></div>
+  </div>
+</section>
+
+<!-- WHY THIS ROLE -->
+<section class="section dark-section">
   <div class="container">
     <div class="section-eyebrow reveal">Why This Role</div>
     <h2 class="section-title reveal reveal-d1">Why I am (potentially)<br>the right fit.</h2>
@@ -694,7 +727,6 @@ function ProofSection(){
       {L==='A' && <LayoutA/>}
       {L==='B' && <LayoutB/>}
       {L==='C' && <LayoutC/>}
-      <FreshEyesForm/>
       <TweaksPanel title="Layout Options">
         <TweakRadio label="Case Study Layout" value={L}
           options={[{label:'A · Hero Cards',value:'A'},{label:'B · Metric Grid',value:'B'},{label:'C · Minimal Rows',value:'C'}]}
@@ -705,6 +737,8 @@ function ProofSection(){
 }
 
 ReactDOM.createRoot(document.getElementById('proof-mount')).render(<ProofSection/>);
+const _feMount = document.getElementById('fresheyes-mount');
+if (_feMount) ReactDOM.createRoot(_feMount).render(<FreshEyesForm/>);
 </script>
 
 <script>
@@ -712,5 +746,6 @@ const revEls=document.querySelectorAll('.reveal');
 const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target)}})},{threshold:.1});
 revEls.forEach(el=>ro.observe(el));
 </script>
+<script type="text/babel" src="build-board.jsx"></script>
 </body>
 </html>
