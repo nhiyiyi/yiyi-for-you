@@ -378,7 +378,7 @@ footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify
 
   submitBtn.addEventListener('click',function(){
     var feedback=textArea.value||'(no comment)';
-    var body='Rating: '+rating+'/5\nFeedback: '+feedback+'\nFrom: Axcel Partners presentation page';
+    var body='Rating: '+rating+'/5\nFeedback: '+feedback+'\nFrom: yiyi-for-you.vercel.app';
 
     // Try FormSubmit first
     var formData=new FormData();
@@ -395,7 +395,7 @@ footer{padding:24px 48px;border-top:1px solid var(--border);display:flex;justify
     formData.append('_template','table');
     formData.append('rating',rating+'/5');
     formData.append('feedback',feedback);
-    formData.append('source','Axcel Partners presentation');
+    formData.append('source', window.location.href);
 
     fetch('https://formsubmit.co/ajax/nhivu.hcm.work@gmail.com',{
       method:'POST',body:formData,headers:{'Accept':'application/json'}
